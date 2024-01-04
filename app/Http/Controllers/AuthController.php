@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function login(LoginRequest $request)
     {
-        if (Auth::attempt($request->all())) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $request->session()->regenerate();
 
             return redirect('/');
