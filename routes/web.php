@@ -26,13 +26,14 @@ Route::get('/topics/create', 'App\Http\Controllers\TopicController@create');
 Route::post('/topics', 'App\Http\Controllers\TopicController@store');
 Route::get('/topics/{post}', 'App\Http\Controllers\TopicController@show');
 
+
 Route::get('login', function () {
     return view('login');
 });
 
-Route::get('register', function () {
-    return view('register');
+Route::get('/register', 'App\Http\Controllers\UserController@create');
+Route::post('/register', 'App\Http\Controllers\UserController@store');
+Route::get('/login', function () {
+    return view('login');
 });
-
-
-
+Route::post('/login', 'App\Http\Controllers\AuthController@login');

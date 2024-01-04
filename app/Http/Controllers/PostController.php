@@ -4,15 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Topic;
+use App\Services\ImageService;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\File;
 
 class PostController extends Controller
 {
+    public function __construct(PostService $postService, ImageService $imageService)
+    {
+        $this->postService = $postService;
+        $this->imageService = $imageService;
+    }
+
     public function index()
     {
-        $posts = Post::all();
-        $postCount = Post::all()->count();
+        $posts = $this->postService->getAll();
+        $postCount = $this->postService->getCount();
         return view('posts.index', compact(['posts', 'postCount']));
     }
 
@@ -23,14 +31,12 @@ class PostController extends Controller
 
     public function create()
     {
-
         $topics = Topic::all();
         return view('posts.create', compact('topics'));
     }
 
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'title' => 'required',
             'description' => '',
@@ -38,22 +44,16 @@ class PostController extends Controller
             'topic' => ['required', 'string']
         ]);
 
+        // todo
         $topic = Topic::where(['title' => $validated['topic']])->first();
         if (!$topic) {
-            return response(400)->json([
-                'error' => 'Topic not found',
-            ]);
+            return response(400)->json(['error' => 'Topic not found']);
         }
 
-        $fileName = time() . '.' . $request['image']->extension();
-        $request->image->storeAs('public/images', $fileName);
+        $fileName = $this->imageService->saveImage($request['image']);
 
-        $post = new Post();
-        $post['title'] = $validated['title'];
-        $post['description'] = $validated['description'];
-        $post['image'] = $fileName;
-        $post['topic_id'] = $topic->id;
-        $post->save();
+        ['title' => $title, 'description' => $description] = $validated;
+        $this->postService->createPost($title, $description, $fileName, $title->id);
 
         return redirect('/posts');
     }

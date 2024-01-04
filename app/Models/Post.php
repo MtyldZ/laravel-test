@@ -13,12 +13,14 @@ class Post extends Model
     public ?string $description = null;
     public ?string $image = '';
     public int $topic_id = 0;
+    public int $user_id = 0;
 
     protected $fillable = [
         'title',
         'description',
         'image',
         'topic_id',
+        'user_id',
     ];
 
     public function topic()
