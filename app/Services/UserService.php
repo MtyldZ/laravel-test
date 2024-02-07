@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Contracts\Services\Intefaces\UserServiceInterface;
+
 use App\Models\User;
+use App\Services\Interfaces\UserServiceInterface;
 
 class UserService implements UserServiceInterface
 {

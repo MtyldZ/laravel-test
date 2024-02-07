@@ -20,7 +20,6 @@ class Post extends Model
         'description',
         'image',
         'topic_id',
-        'user_id',
     ];
 
     public function topic()

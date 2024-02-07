@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Contracts\Services\Intefaces;
+namespace App\Services\Interfaces;
 
 use App\Models\User;
-use App\ValueObjects\Phone;
 use LogicException;
 
 interface UserServiceInterface

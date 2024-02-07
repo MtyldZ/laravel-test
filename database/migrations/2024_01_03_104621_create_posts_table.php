@@ -16,11 +16,11 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
-            $table->unsignedBigInteger('topic_id')->index();
-            $table->unsignedBigInteger('user_id')->index();
+//             $table->unsignedBigInteger('topic_id')->index();
+//            $table->unsignedBigInteger('user_id')->index();
 
-            $table->foreign('topic_id')->references('id')->on('topics')->cascadeOnDelete();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+//             $table->foreign('topic_id')->references('id')->on('topics')->cascadeOnDelete();
+//            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

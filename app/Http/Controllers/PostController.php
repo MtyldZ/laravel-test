@@ -53,7 +53,7 @@ class PostController extends Controller
         $fileName = $this->imageService->saveImage($request['image']);
 
         ['title' => $title, 'description' => $description] = $validated;
-        $this->postService->createPost($title, $description, $fileName, $title->id);
+        $this->postService->createPost($title, $description, $fileName, $topic->id);
 
         return redirect('/posts');
     }
