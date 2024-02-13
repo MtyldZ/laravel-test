@@ -2,33 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ItemService;
+use App\Services\Veranda\Navigation;
 use App\Services\Veranda\VerandaService;
+use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
-    private ItemService $itemService;
-    private VerandaService $verandaService;
+    private VerandaService $veranda;
 
-    public function __construct(ItemService $itemService, VerandaService $verandaService)
+    public function __construct()
     {
-        $this->itemService = $itemService;
-        $this->verandaService = $verandaService;
+        $this->veranda = app(VerandaService::class);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->itemService->getAllV2();
-        $verandaData = $this->verandaService->getPageByLink('/');
+        // laravel acilirken 1 sefer yapacak veranda service cache i doldur
+        // plugin yapmak kolay mi arastir
+        // demo websitesini yap
 
-        return view('index', compact(['data', 'verandaData']));
-    }
+        // url +
+        // get page by url +
+        // template cek +
+        // template in layout id sine gore layout u al +
+        // layout dan navigationGroup lari al +
+        // return view(template->viewName, compact(['pageData', 'navigationGroup'])); +
 
-    public function leftSideBarIndex()
-    {
-        $data = $this->itemService->getAllV2();
-        $verandaData = $this->verandaService->getPageByLink('/leftsidebar');
+        $url = $request->path();
+        $page = $this->veranda->getPageByLink($url);
+        $pageTemplate = $this->veranda->getPageTemplate($page->templateId);
+        $pageLayout = $this->veranda->getPageLayout($pageTemplate->layoutId);
 
-        return view('index', compact(['data', 'verandaData']));
+        $nav = [];
+        foreach ($pageLayout->navigationGroups as $navigationGroup) {
+            $nav[$navigationGroup['key']] = $this->veranda->getNavigationGroups($navigationGroup['key'], $page->language->languageCode);
+        }
+        $navigation = new Navigation($nav);
+
+        return view($pageTemplate->viewName, ['page' => $page, 'nav' => $navigation]);
     }
 }

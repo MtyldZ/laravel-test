@@ -1,5 +1,17 @@
+@php
+    use App\Services\Veranda\ResponseModel\GetPageByIdResponse;
+    use App\Services\Veranda\Content;
+    use App\Services\Veranda\Navigation;
+    use App\Services\Veranda\ResponseModel\NavigationGroup;
+
+    /** @var GetPageByIdResponse $page */
+    /** @var Content $item */
+    /** @var Navigation $nav */
+    /** @var NavigationGroup $navItem */
+@endphp
+
 @extends('layouts.app')
-<title>{{$data->page_title}}</title>
+{{--<title>{{$data->page_title}}</title>--}}
 
 @section('content')
     <div id="page-wrapper">
@@ -13,8 +25,8 @@
             <!-- Nav -->
             <nav id="nav">
                 <ul>
-                    @foreach ($data->navbar as $navbar)
-                        <li><a href="index.html">{{$navbar}}</a></li>
+                    @foreach ($nav->get("key.menu.header") as $navItem )
+                        <li><a href="{{$navItem->url}}">{{$navItem->title}}</a></li>
                     @endforeach
                 </ul>
             </nav>
@@ -24,7 +36,7 @@
         <!-- Banner -->
         <section id="banner">
             <header>
-                <h2>{!!$data->slider_caption!!}</h2>
+                {{--                <h2>{!!$data->slider_caption!!}</h2>--}}
                 <a href="#" class="button">Learn More</a>
             </header>
         </section>
@@ -33,21 +45,13 @@
         <section class="wrapper style1">
             <div class="container">
                 <div class="row gtr-200">
-{{--                    @foreach($data->poi as $poi)--}}
-{{--                        <section class="col-4 col-12-narrower">--}}
-{{--                            <div class="box highlight">--}}
-{{--                                <i class="icon solid major fa-paper-plane"></i>--}}
-{{--                                <h3>{{$poi->value}} SADAS</h3>--}}
-{{--                                <p>{{$poi->items[0]}}</p>--}}
-{{--                            </div>--}}
-{{--                        </section>--}}
-{{--                    @endforeach--}}
-                    @foreach($verandaData->content['key.pagetemplate.homepage.thisisimportant'] as $thisisimportant)
+                    @foreach($page->getContent('key.pagetemplate.homepage.thisisimportant') as $item)
                         <section class="col-4 col-12-narrower">
                             <div class="box highlight">
-                                <img src="{{$thisisimportant->dataDetail->image}}" alt="" style="height: 120px; width: 120px; margin: auto"/>
-                                <h3>{{$thisisimportant->dataDetail->text1}}</h3>
-                                <p>{{$thisisimportant->dataDetail->text2}}</p>
+                                <img src="{{$item->get("key.dataitem.imagewithtext.image", $warn=false)}}" alt=""
+                                     style="height: 120px; width: 120px; margin: auto"/>
+                                <h3>{{$item->get("key.dataitem.imagewithtext.text1")}}</h3>
+                                <p>{{$item->get("key.dataitem.imagewithtext.text2")}}</p>
                             </div>
                         </section>
                     @endforeach
@@ -59,10 +63,10 @@
         <section class="wrapper style2">
             <div class="container">
                 <header class="major">
-{{--                    <h2>{{$data->heading}}</h2>--}}
-{{--                    <p>{{$data->heading_subtitle}}</p>--}}
-                    <h2>{{$verandaData->content['key.pagetemplate.homepage.heading1'][0]->dataDetail->text}}</h2>
-                    <p>{{$verandaData->content['key.pagetemplate.homepage.heading2'][0]->dataDetail->text}}</p>
+                    {{--                    <h2>{{$data->heading}}</h2>--}}
+                    {{--                    <p>{{$data->heading_subtitle}}</p>--}}
+                    <h2>{{$page->getContent('key.pagetemplate.homepage.heading1')->get("key.dataitem.singletext.text")}}</h2>
+                    <p>{{$page->getContent('key.pagetemplate.homepage.heading2')->get("key.dataitem.singletext.text")}}</p>
                 </header>
             </div>
         </section>
@@ -71,26 +75,15 @@
         <section class="wrapper style1">
             <div class="container">
                 <div class="row">
-{{--                    @foreach($data->thing as $thing)--}}
-{{--                        <section class="col-6 col-12-narrower">--}}
-{{--                            <div class="box post">--}}
-{{--                                <a href="#" class="image left"><img src="images/pic01.jpg" alt=""/></a>--}}
-{{--                                <div class="inner">--}}
-{{--                                    <h3>{{$thing->value}}</h3>--}}
-{{--                                    <p>{{$thing->items[0]}}</p>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </section>--}}
-{{--                    @endforeach--}}
-                    @foreach($verandaData->content['key.pagetemplate.homepage.thethings'] as $thing)
+                    @foreach($page->getContent('key.pagetemplate.homepage.thethings') as $item)
                         <section class="col-6 col-12-narrower">
                             <div class="box post">
                                 <a href="#" class="image left">
-                                    <img src="{{$thing->dataDetail->image}}" alt=""/>
+                                    <img src="{{$item->get("key.dataitem.imagewithtext.image", false)}}" alt=""/>
                                 </a>
                                 <div class="inner">
-                                    <h3>{{$thing->dataDetail->text1}}</h3>
-                                    <p>{{$thing->dataDetail->text2}}</p>
+                                    <h3>{{$item->get("key.dataitem.imagewithtext.text1")}}</h3>
+                                    <p>{{$item->get("key.dataitem.imagewithtext.text2")}}</p>
                                 </div>
                             </div>
                         </section>
@@ -103,9 +96,9 @@
         <section id="cta" class="wrapper style3">
             <div class="container">
                 <header>
-                    <h2>{{$verandaData->content['key.pagetemplate.homepage.footertext'][0]->dataDetail->text}}</h2>
+                    <h2>{{$page->getContent('key.pagetemplate.homepage.footertext')->get("key.dataitem.singletext.text")}}</h2>
                     <a href="#" class="button">
-                        {{$verandaData->content['key.pagetemplate.homepage.footerheadingbuttontext'][0]->dataDetail->text}}
+                        {{$page->getContent('key.pagetemplate.homepage.footerheadingbuttontext')->get("key.dataitem.singletext.text")}}
                     </a>
                 </header>
             </div>
