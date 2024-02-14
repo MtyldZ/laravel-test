@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Veranda;
+namespace App\Services\KaviCms;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

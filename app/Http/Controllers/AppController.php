@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Veranda\IKaviCmsCacheReader;
-use App\Services\Veranda\Navigation;
-use App\Services\Veranda\KaviCMS;
+use App\Services\KaviCms\IKaviCmsCacheReader;
+use App\Services\KaviCms\Navigation;
+use App\Services\KaviCms\KaviCMS;
 use Illuminate\Http\Request;
 
 class AppController extends Controller

@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Services\Veranda;
+namespace App\Services\KaviCms;
 
-use App\Services\Veranda\ResponseModel\GetPageByIdResponse;
-use App\Services\Veranda\ResponseModel\PageLayout;
-use App\Services\Veranda\ResponseModel\PageTemplate;
+use App\Services\KaviCms\ResponseModel\GetPageByIdResponse;
+use App\Services\KaviCms\ResponseModel\PageLayout;
+use App\Services\KaviCms\ResponseModel\PageTemplate;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
@@ -14,13 +14,13 @@ class KaviCmsCacheReader implements IKaviCmsCacheReader
     function getPageByPath(string $path): View
     {
         /**
+         * @var GetPageByIdResponse $pageById
          * @var PageTemplate $template
          * @var PageLayout $layout
          */
 
         $linksToCache = Cache::get("kavicms/links");
 
-        //** @var GetPageByIdResponse */
         $pageById = Cache::get("kavicms/pages/$linksToCache[$path]");
         $template = Cache::get("kavicms/templates")[$pageById->templateId];
         $layout = Cache::get("kavicms/pagelayouts")[$template->layoutId];

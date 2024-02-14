@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Veranda;
+namespace App\Services\KaviCms;
 
 class Content
 {

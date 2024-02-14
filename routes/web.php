@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\Veranda\KaviCMSController;
+use App\Services\KaviCms\KaviCMSController;
 use Illuminate\Support\Facades\Route;
 
 /*

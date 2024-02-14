@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Veranda;
+namespace App\Services\KaviCms;
 
-use App\Services\Veranda\ResponseModel\GetPagesResponse;
-use App\Services\Veranda\ResponseModel\NavigationGroup;
-use App\Services\Veranda\ResponseModel\PageLayout;
-use App\Services\Veranda\ResponseModel\PageTemplate;
-use App\Services\Veranda\ResponseModel\GetPageByIdResponse;
+use App\Services\KaviCms\ResponseModel\GetPagesResponse;
+use App\Services\KaviCms\ResponseModel\NavigationGroup;
+use App\Services\KaviCms\ResponseModel\PageLayout;
+use App\Services\KaviCms\ResponseModel\PageTemplate;
+use App\Services\KaviCms\ResponseModel\GetPageByIdResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 

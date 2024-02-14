@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Veranda\ResponseModel;
+namespace App\Services\KaviCms\ResponseModel;
 
 class PageTemplate
 {

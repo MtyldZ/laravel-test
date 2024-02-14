@@ -1,8 +1,8 @@
 @php
-    use App\Services\Veranda\ResponseModel\GetPageByIdResponse;
-    use App\Services\Veranda\Content;
-    use App\Services\Veranda\Navigation;
-    use App\Services\Veranda\ResponseModel\NavigationGroup;
+    use App\Services\KaviCms\ResponseModel\GetPageByIdResponse;
+    use App\Services\KaviCms\Content;
+    use App\Services\KaviCms\Navigation;
+    use App\Services\KaviCms\ResponseModel\NavigationGroup;
 
     /** @var GetPageByIdResponse $page */
     /** @var Content $item */
@@ -11,8 +11,6 @@
 @endphp
 
 @extends('layouts.app')
-{{--<title>{{$data->page_title}}</title>--}}
-
 @section('content')
     <div id="page-wrapper">
 
@@ -36,7 +34,6 @@
         <!-- Banner -->
         <section id="banner">
             <header>
-                {{--                <h2>{!!$data->slider_caption!!}</h2>--}}
                 <a href="#" class="button">Learn More</a>
             </header>
         </section>
@@ -63,8 +60,6 @@
         <section class="wrapper style2">
             <div class="container">
                 <header class="major">
-                    {{--                    <h2>{{$data->heading}}</h2>--}}
-                    {{--                    <p>{{$data->heading_subtitle}}</p>--}}
                     <h2>{{$page->getContent('key.pagetemplate.homepage.heading1')->get("key.dataitem.singletext.text")}}</h2>
                     <p>{{$page->getContent('key.pagetemplate.homepage.heading2')->get("key.dataitem.singletext.text")}}</p>
                 </header>

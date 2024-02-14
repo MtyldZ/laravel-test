@@ -2,12 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\Veranda\IKaviCmsCacheReader;
-use App\Services\Veranda\KaviCmsCacheReader;
-use App\Services\Veranda\KaviCmsCacheWriter;
+use App\Services\KaviCms\IKaviCmsCacheReader;
+use App\Services\KaviCms\KaviCmsCacheReader;
+use App\Services\KaviCms\KaviCmsCacheWriter;
 use Illuminate\Support\ServiceProvider;
-
-$isFirst = true;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,19 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singletonIf(IKaviCmsCacheReader::class, function () {
-//            Cache::flush();
-            error_log("cms singleton if bind\n");
+        $this->app->singleton(IKaviCmsCacheReader::class, function () {
             $cmsWriter = new KaviCmsCacheWriter();
             $cmsWriter->initCaches();
             return new KaviCmsCacheReader();
         });
-
-//        $this->app->booting(function () {
-//            error_log("laravel booting\n");
-//            $cmsWriter = new KaviCmsCacheWriter();
-//            $cmsWriter->initCaches();
-//        });
     }
 
     /**
@@ -36,6 +26,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }

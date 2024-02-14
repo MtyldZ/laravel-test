@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Veranda;
+namespace App\Services\KaviCms;
 
-use App\Services\Veranda\ResponseModel\GetPagesResponse;
-use App\Services\Veranda\ResponseModel\GetPageByIdResponse;
+use App\Services\KaviCms\ResponseModel\GetPagesResponse;
+use App\Services\KaviCms\ResponseModel\GetPageByIdResponse;
 
 interface IKaviCmsApiClient
 {

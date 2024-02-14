@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Veranda\ResponseModel;
+namespace App\Services\KaviCms\ResponseModel;
 
-use App\Services\Veranda\Language;
+use App\Services\KaviCms\Language;
 
 class NavigationGroup
 {
