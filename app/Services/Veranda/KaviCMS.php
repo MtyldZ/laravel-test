@@ -10,20 +10,19 @@ use App\Services\Veranda\ResponseModel\PageTemplate;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
-class VerandaService
+class KaviCMS
 {
-    const EXP = 84600;
     const API_URL = 'http://54.73.124.167:8091';
     const AUTH_URL = 'http://3.255.242.198:8092';
 
     public array $pageByIdResponseList = [];
     public array $linkToPageId = [];
 
-    public static function init(): VerandaService
+    public static function init(): KaviCMS
     {
         error_log("veranda service init worked");
 //        Cache::flush();
-        $instance = new VerandaService();
+        $instance = new KaviCMS();
 
         $instance->getToken();
         $instance->getPageTemplates();
@@ -52,54 +51,56 @@ class VerandaService
 
     private function getToken(): string
     {
-        $token = (string)Cache::get('token');
-        if (!$token) {
-            $res = Http::asForm()->post(self::AUTH_URL . "/oauth2/token", [
-                'grant_type' => 'client_credentials',
-                'client_id' => env('VERANDA_CLIENT_ID'),
-                'client_secret' => env('VERANDA_CLIENT_SECRET'),
-            ]);
-            if (!$res->ok()) {
-                dd("Veranda auth unauthorized");
-            }
-            $token = $res['access_token'];
-            Cache::put('token', $token, $res['expires_in']);
+        $token = (string)Cache::get('kavicms_token');
+        // validate & refresh token
+        if ($token) { // todo check expired
+            return $token;
         }
+        $res = Http::asForm()->post(self::AUTH_URL . "/oauth2/token", [
+            'grant_type' => 'client_credentials',
+            'client_id' => env('VERANDA_CLIENT_ID'),
+            'client_secret' => env('VERANDA_CLIENT_SECRET'),
+        ]);
+        if (!$res->ok()) {
+            dd("Veranda auth unauthorized");
+        }
+        $token = $res['access_token'];
+        Cache::put('kavicms_token', $token, $res['expires_in']);
         return $token;
     }
 
     private function getLanguages(): array
     {
-        $languages = Cache::get("/languages");
+        $languages = Cache::get("kavicms/languages");
         if (!$languages) {
             $res = Http::withToken($this->getToken())->get(self::API_URL . "/languages")->json();
             $languages = [];
             foreach ($res as $language) {
                 $languages[] = new Language($language);
             }
-            Cache::put("/languages", $languages, self::EXP);
+            Cache::put("/languages", $languages);
         }
         return $languages;
     }
 
     private function getPages(): GetPagesResponse
     {
-        $pagesRes = Cache::get("/pages");
+        $pagesRes = Cache::get("kavicms/pages");
         if (!$pagesRes) {
             $res = Http::withToken($this->getToken())->get(self::API_URL . "/pages")->json();
             $pagesRes = new GetPagesResponse($res);
-            Cache::put("/pages", $pagesRes, self::EXP);
+            Cache::put("/pages", $pagesRes);
         }
         return $pagesRes;
     }
 
     private function getPageById(int $id): GetPageByIdResponse
     {
-        $page = Cache::get("/pages/$id");
+        $page = Cache::get("kavicms/pages/$id");
         if (!$page) {
             $res = Http::withToken($this->getToken())->get(self::API_URL . "/pages/$id")->json();
             $page = new GetPageByIdResponse($res);
-            Cache::put("/pages/$id", $page, self::EXP);
+            Cache::put("/pages/$id", $page);
         }
         return $page;
     }
@@ -114,13 +115,13 @@ class VerandaService
 
     private function getPageTemplates(): array
     {
-        $pageTemplates = Cache::get("/pagetemplates");
+        $pageTemplates = Cache::get("kavicms/pagetemplates");
         if (!$pageTemplates) {
             $res = Http::withToken($this->getToken())->get(self::API_URL . '/pagetemplates')->json();
             foreach ($res as $item) {
                 $pageTemplates[$item['id']] = new PageTemplate($item);
             }
-            Cache::put("/pagetemplates", $pageTemplates, self::EXP);
+            Cache::put("/pagetemplates", $pageTemplates);
         }
         return $pageTemplates;
     }
@@ -132,13 +133,13 @@ class VerandaService
 
     private function getPageLayouts(): array
     {
-        $pageLayouts = Cache::get("/pagelayouts");
+        $pageLayouts = Cache::get("kavicms/pagelayouts");
         if (!$pageLayouts) {
             $res = Http::withToken($this->getToken())->get(self::API_URL . '/pagelayouts')->json();
             foreach ($res as $item) {
                 $pageLayouts[$item['id']] = new PageLayout($item);
             }
-            Cache::put("/pagelayouts", $pageLayouts, self::EXP);
+            Cache::put("/pagelayouts", $pageLayouts);
         }
         return $pageLayouts;
     }
@@ -151,7 +152,7 @@ class VerandaService
     public function getNavigationGroups(string $navigationGroupKey, string $language): array
     {
         $path = "/navigations/$navigationGroupKey/$language";
-        $data = Cache::get($path);
+        $data = Cache::get("kavicms$path");
         if (!$data) {
             $res = Http::withToken($this->getToken())->get(self::API_URL . $path)->json();
 
@@ -180,7 +181,7 @@ class VerandaService
             }
 
             $data = NavigationGroup::sort($onesWithoutParent);
-            Cache::put($path, $data, self::EXP);
+            Cache::put("kavicms$path", $data);
         }
         return $data;
     }

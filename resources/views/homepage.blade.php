@@ -25,7 +25,7 @@
             <!-- Nav -->
             <nav id="nav">
                 <ul>
-                    @foreach ($nav->get("key.menu.header") as $navItem )
+                    @foreach ($nav->get("key.menu.header") as $navItem)
                         <li><a href="{{$navItem->url}}">{{$navItem->title}}</a></li>
                     @endforeach
                 </ul>

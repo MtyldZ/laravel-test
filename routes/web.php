@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\Veranda\KaviCMSController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{slug}', 'App\Http\Controllers\AppController@index')->where('slug', '.*');
+//Route::get('/{slug}', 'App\Http\Controllers\AppController@index')->where('slug', '.*');
+Route::get('/{slug}', [KaviCMSController::class , 'index'])->where('slug', '.*');
 
 //Route::get('/leftsidebar', 'App\Http\Controllers\AppController@leftSideBarIndex');
 //

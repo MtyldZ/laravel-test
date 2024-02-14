@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Veranda\IKaviCmsCacheReader;
 use App\Services\Veranda\Navigation;
-use App\Services\Veranda\VerandaService;
+use App\Services\Veranda\KaviCMS;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
-    private VerandaService $veranda;
+    private KaviCMS $veranda;
+    private IKaviCmsCacheReader $cmsCacheReader;
 
     public function __construct()
     {
-        $this->veranda = app(VerandaService::class);
+        $this->veranda = app(KaviCMS::class);
+        $this->cmsCacheReader = app(IKaviCmsCacheReader::class);
     }
 
     public function index(Request $request)
